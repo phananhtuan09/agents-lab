@@ -1,0 +1,8 @@
+[agents]
+max_threads = 6
+max_depth = 2
+
+[agents.spec_review]
+description = "Review requirement spec for ambiguity, missing requirements, execution readiness, and sync safety."
+config_file = "agents/review-spec.toml"
+nickname_candidates = ["SpecReview", "SpecReviewer"]

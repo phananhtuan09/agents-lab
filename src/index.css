@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-canvas: #070B14;
+    --bg-surface: #0F1422;
+    --bg-elevated: #151D2E;
+    --border-subtle: #30384B;
+    --border-strong: #5D6A82;
+    --text-main: #CDD7E8;
+    --text-muted: #7886A0;
+    --text-heading: #F5F7FB;
+    --brand-primary: #3E63F5;
+    --brand-primary-strong: #2F4ED1;
+    --brand-accent: #7742F0;
+    --brand-accent-soft: #9468FF;
+  }
+
+  * {
+    @apply border-border-subtle;
+  }
+
+  body {
+    @apply bg-app-background text-text-main font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-text-heading font-display font-medium;
+  }
+
+  h1 {
+    @apply text-6xl;
+  }
+
+  h2 {
+    @apply text-4xl;
+  }
+
+  h3 {
+    @apply text-3xl;
+  }
+
+  h4 {
+    @apply text-2xl;
+  }
+
+  h5 {
+    @apply text-xl;
+  }
+
+  h6 {
+    @apply text-lg;
+  }
+
+  p {
+    @apply text-base leading-relaxed text-text-main;
+  }
+
+  strong {
+    @apply font-semibold text-text-heading;
+  }
+
+  code {
+    @apply font-mono text-sm;
+  }
+
+  pre {
+    @apply font-mono text-sm bg-bg-elevated p-4 rounded-card overflow-x-auto;
+  }
+
+  a {
+    @apply text-primary-500 hover:text-primary-400 transition-colors;
+  }
+
+  ul, ol {
+    @apply list-disc list-inside space-y-2 ml-4;
+  }
+
+  li {
+    @apply text-text-main;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-pill font-medium transition-all duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-brand-primary text-white hover:bg-brand-primary-strong active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-bg-surface border border-border-strong text-text-main hover:bg-bg-elevated active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-text-muted hover:text-text-main hover:bg-bg-elevated;
+  }
+
+  .card {
+    @apply bg-bg-surface border border-border-subtle rounded-card p-6 shadow-soft-depth;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 rounded-input bg-bg-elevated border border-border-subtle text-text-main placeholder-text-muted focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all;
+  }
+
+  .input-lg {
+    @apply text-lg;
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-brand-primary text-white;
+  }
+
+  .badge-accent {
+    @apply bg-brand-accent text-white;
+  }
+
+  .badge-neutral {
+    @apply bg-bg-elevated text-text-muted;
+  }
+
+  .panel {
+    @apply bg-bg-surface border border-border-subtle rounded-card p-6;
+  }
+
+  .panel-header {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .panel-title {
+    @apply text-xl font-semibold text-text-heading;
+  }
+
+  .panel-subtitle {
+    @apply text-sm text-text-muted mt-1;
+  }
+
+  .status-success {
+    @apply text-success;
+  }
+
+  .status-warning {
+    @apply text-warning;
+  }
+
+  .status-error {
+    @apply text-error;
+  }
+
+  .status-info {
+    @apply text-info;
+  }
+
+  .text-muted {
+    @apply text-text-muted;
+  }
+
+  .text-heading {
+    @apply text-text-heading;
+  }
+
+  .border-subtle {
+    @apply border-border-subtle;
+  }
+
+  .border-strong {
+    @apply border-border-strong;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent;
+  }
+
+  .bg-gradient-app {
+    @apply bg-app-background;
+  }
+}
