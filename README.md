@@ -75,3 +75,39 @@ Uses the `Signal Noir` dark theme with graphite surfaces, cobalt base, and viole
 Copy `.env.example` to `.env` and configure as needed:
 - `VITE_DEV_SERVER_PORT` - Development server port (default: 5173)
 - `LOG_LEVEL` - Logging level (info, warn, error)
+
+## Quality Baseline
+
+Before considering a change complete, run the quality checks for the layer you modified.
+
+### Renderer (TypeScript / React)
+
+```bash
+pnpm run quality
+```
+
+This runs three checks in sequence:
+- **Type-check**: `pnpm run check` — `tsc --noEmit`
+- **Lint**: `pnpm run lint` — `eslint .`
+- **Tests**: `pnpm run test` — `vitest run`
+
+You can also run each check individually.
+
+### Native Host (Rust)
+
+Run from the repository root:
+
+```bash
+pnpm run quality:rust
+```
+
+This runs three checks in sequence:
+- **Format**: `cargo fmt --check`
+- **Clippy**: `cargo clippy -- -D warnings`
+- **Tests**: `cargo test`
+
+Or run each individually: `pnpm run check:rust:fmt`, `pnpm run check:rust:clippy`, `pnpm run check:rust:test`.
+
+### Quality Gate Rule
+
+A change is not considered complete if it breaks any of these baseline checks. Both renderer and native host checks must pass independently — failures in one layer do not excuse the other.

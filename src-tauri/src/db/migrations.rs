@@ -51,15 +51,14 @@ impl Runner {
                 .unchecked_transaction()
                 .map_err(|e| format!("Failed to start migration transaction: {}", e))?;
 
-            tx.execute_batch(migration.sql())
-                .map_err(|e| {
-                    format!(
-                        "Migration V{} '{}' failed: {}",
-                        migration.version(),
-                        migration.name(),
-                        e
-                    )
-                })?;
+            tx.execute_batch(migration.sql()).map_err(|e| {
+                format!(
+                    "Migration V{} '{}' failed: {}",
+                    migration.version(),
+                    migration.name(),
+                    e
+                )
+            })?;
 
             tx.execute(
                 "INSERT INTO _migrations (version, name) VALUES (?1, ?2)",
@@ -68,11 +67,7 @@ impl Runner {
             .map_err(|e| format!("Failed to record migration V{}: {}", migration.version(), e))?;
 
             tx.commit().map_err(|e| {
-                format!(
-                    "Failed to commit migration V{}: {}",
-                    migration.version(),
-                    e
-                )
+                format!("Failed to commit migration V{}: {}", migration.version(), e)
             })?;
         }
 
@@ -115,8 +110,11 @@ mod tests {
             .unwrap();
         assert_eq!(count, 1);
 
-        conn.execute("INSERT INTO settings (key, value) VALUES ('theme', 'dark')", [])
-            .unwrap();
+        conn.execute(
+            "INSERT INTO settings (key, value) VALUES ('theme', 'dark')",
+            [],
+        )
+        .unwrap();
         let value: String = conn
             .query_row(
                 "SELECT value FROM settings WHERE key = 'theme'",

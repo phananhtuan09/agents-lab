@@ -1,0 +1,8 @@
+{
+  "identifier": "default",
+  "description": "Minimal permissions allowlist for Agent Labs foundation. Explicitly excludes shell, fs, process, and other unnecessary capabilities.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default"
+  ]
+}

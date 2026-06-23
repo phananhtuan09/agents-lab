@@ -6,17 +6,9 @@ use tauri::Manager;
 mod db;
 mod logging;
 
-use serde::Serialize;
-
 struct AppState {
     db: Mutex<rusqlite::Connection>,
     logger: logging::Logger,
-}
-
-#[derive(Serialize)]
-struct SettingsEntry {
-    key: String,
-    value: String,
 }
 
 fn main() {
@@ -29,14 +21,14 @@ fn main() {
             settings_set,
         ])
         .setup(|app| {
-            let app_data_dir = app.path().app_data_dir()
+            let app_data_dir = app
+                .path()
+                .app_data_dir()
                 .expect("Failed to get app data directory");
-            std::fs::create_dir_all(&app_data_dir)
-                .expect("Failed to create app data directory");
+            std::fs::create_dir_all(&app_data_dir).expect("Failed to create app data directory");
 
             let db_path = app_data_dir.join("agent-labs.db");
-            let db = rusqlite::Connection::open(&db_path)
-                .expect("Failed to open database");
+            let db = rusqlite::Connection::open(&db_path).expect("Failed to open database");
 
             db.execute_batch("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
                 .expect("Failed to set database pragmas");
@@ -46,10 +38,13 @@ fn main() {
             migration_runner.run(&db).expect("Migrations failed");
 
             let logger = logging::Logger::new();
-            let log_path = app.path().app_log_dir()
+            let log_path = app
+                .path()
+                .app_log_dir()
                 .expect("Failed to get log directory")
                 .join("agent-labs.log");
-            logger.init(log_path.to_str().unwrap())
+            logger
+                .init(log_path.to_str().unwrap())
                 .expect("Failed to initialize logger");
 
             logger.log("INFO", "Application started");
@@ -66,7 +61,11 @@ fn main() {
 }
 
 #[tauri::command]
-fn log_message(level: String, message: String, state: tauri::State<'_, AppState>) -> Result<(), String> {
+fn log_message(
+    level: String,
+    message: String,
+    state: tauri::State<'_, AppState>,
+) -> Result<(), String> {
     state.logger.log(&level, &message);
     Ok(())
 }
@@ -87,12 +86,17 @@ fn settings_get(key: String, state: tauri::State<'_, AppState>) -> Result<Option
 }
 
 #[tauri::command]
-fn settings_set(key: String, value: String, state: tauri::State<'_, AppState>) -> Result<(), String> {
+fn settings_set(
+    key: String,
+    value: String,
+    state: tauri::State<'_, AppState>,
+) -> Result<(), String> {
     let db = state.db.lock().map_err(|e| e.to_string())?;
     db.execute(
         "INSERT INTO settings (key, value) VALUES (?1, ?2)
          ON CONFLICT(key) DO UPDATE SET value = excluded.value",
         rusqlite::params![key, value],
-    ).map_err(|e| e.to_string())?;
+    )
+    .map_err(|e| e.to_string())?;
     Ok(())
 }

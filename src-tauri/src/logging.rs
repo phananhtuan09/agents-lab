@@ -28,12 +28,25 @@ impl Logger {
         let log_entry = format!("[{}] [{}] {}\n", timestamp, level, message);
 
         if let Some(log_path) = self.log_file.lock().unwrap().as_ref() {
-            if let Ok(mut file) = OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(log_path)
-            {
-                let _ = file.write_all(log_entry.as_bytes());
+            match OpenOptions::new().create(true).append(true).open(log_path) {
+                Ok(mut file) => {
+                    if let Err(e) = file.write_all(log_entry.as_bytes()) {
+                        eprintln!(
+                            "[{}] [ERROR] Failed to write to log file '{}': {}",
+                            timestamp,
+                            log_path.display(),
+                            e
+                        );
+                    }
+                }
+                Err(e) => {
+                    eprintln!(
+                        "[{}] [ERROR] Failed to open log file '{}': {}",
+                        timestamp,
+                        log_path.display(),
+                        e
+                    );
+                }
             }
         }
     }
